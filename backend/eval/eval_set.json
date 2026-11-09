@@ -1,0 +1,16 @@
+[
+ {"q":"I'm very anxious about my board exam result","topic":"exam_pressure","expect":["gita-2-47","gita-2-48","gita-2-38","practice-box","tool-worst-best-likely","practice-long-exhale"]},
+ {"q":"मुझे बहुत गुस्सा आता है और मैं खुद को रोक नहीं पाता","topic":"anger","expect":["gita-2-62","gita-2-63","gita-5-23","gita-3-37","practice-anger-pause","practice-bhramari","story-tortoise-geese"]},
+ {"q":"mujhe neend nahi aati, raat bhar soch soch ke jaagta hoon","topic":"sleep","expect":["practice-sleep","gita-6-17","tool-worry-time","practice-nadi"]},
+ {"q":"My grandfather passed away last week and I miss him","topic":"grief","expect":["gita-2-22","practice-diya","tool-basic-needs","gita-2-14"]},
+ {"q":"I feel so lonely, nobody understands me","topic":"loneliness","expect":["practice-reach-out","gita-9-22","story-four-friends","practice-diya"]},
+ {"q":"I failed again, I feel worthless and stupid","topic":"self_worth","expect":["gita-6-5","tool-self-compassion","tool-reframe","gita-2-48"]},
+ {"q":"I have no motivation, I can't even start studying","topic":"low_motivation","expect":["tool-tiny-action","practice-walk","gita-2-47","gita-6-5"]},
+ {"q":"I'm exhausted, burnt out from work","topic":"burnout","expect":["practice-body-scan","gita-6-17","tool-basic-needs","practice-walk","gita-2-14"]},
+ {"q":"my mind keeps racing, I overthink everything","topic":"overthinking","expect":["gita-6-35","tool-worry-time","practice-nadi","tool-thought-label","practice-journal"]},
+ {"q":"I'm scared about the future, so afraid of what will happen","topic":"fear","expect":["gita-2-40","gita-2-56","story-hare-lion","tool-worst-best-likely","practice-grounding"]},
+ {"q":"I had a fight with my parents and I feel guilty","topic":"guilt","expect":["gita-12-13-14","tool-self-compassion","practice-journal","story-tortoise-geese"]},
+ {"q":"Everything is too much, too many responsibilities","topic":"overwhelm","expect":["gita-2-70","gita-2-7","tool-basic-needs","practice-journal","tool-tiny-action","practice-long-exhale"]},
+ {"q":"मुझे परीक्षा की बहुत चिंता है","topic":"exam_pressure","expect":["gita-2-47","gita-2-48","practice-box","practice-long-exhale","story-hare-lion"]},
+ {"q":"main bahut udaas hoon, kuch accha nahi lagta","topic":"sadness","expect":["gita-2-14","practice-diya","tool-name-it","practice-walk"]}
+]

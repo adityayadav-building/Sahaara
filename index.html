@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f1923">
+    <meta name="description" content="Sahaara — Your compassionate mental health companion, guided by the wisdom of the Bhagavad Gita.">
+    <title>Sahaara — Threaded in Tradition</title>
+    <link rel="icon" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Playfair+Display:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ─── Ambient Background Canvas ─── -->
+    <canvas id="ambientCanvas" aria-hidden="true"></canvas>
+
+    <!-- ─── Side Navigation Drawer ─── -->
+    <div id="drawer" class="drawer" hidden>
+        <div class="drawer-backdrop" id="drawerBackdrop"></div>
+        <nav class="drawer-panel" role="dialog" aria-modal="true" aria-label="Navigation">
+            <div class="drawer-header">
+                <img src="logo.png" alt="Sahaara" class="drawer-logo">
+                <div>
+                    <h2>Sahaara</h2>
+                    <p class="drawer-sub">Threaded in Tradition</p>
+                </div>
+                <button id="drawerClose" class="icon-btn" aria-label="Close menu"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="drawer-body">
+                <button class="drawer-item" id="navMood"><i class="fas fa-heart-pulse"></i> Mood Check-in</button>
+                <button class="drawer-item" id="navBreath"><i class="fas fa-wind"></i> Guided Breathing</button>
+                <button class="drawer-item" id="navJournal"><i class="fas fa-book-open"></i> My Journal</button>
+                <button class="drawer-item" id="navBedside"><i class="fas fa-moon"></i> Bedside / Eyes-Free</button>
+                <hr class="drawer-divider">
+                <button class="drawer-item" id="navHelp"><i class="fas fa-phone-alt"></i> Crisis Helplines</button>
+                <button class="drawer-item" id="navAbout"><i class="fas fa-info-circle"></i> About Sahaara</button>
+            </div>
+            <div class="drawer-footer">
+                <div class="drawer-section-title"><i class="fas fa-sliders-h"></i> Voice & Pace</div>
+                <div class="drawer-setting-col">
+                    <label for="voiceSelect">Companion Voice</label>
+                    <select id="voiceSelect" class="drawer-select"></select>
+                </div>
+                <div class="drawer-setting-col">
+                    <div class="slider-header">
+                        <label for="voiceSpeed">Pace</label>
+                        <span id="voiceSpeedVal">1.0x (Natural)</span>
+                    </div>
+                    <input type="range" id="voiceSpeed" min="0.85" max="1.15" step="0.05" value="1.0" class="drawer-slider">
+                </div>
+                <div class="drawer-setting-actions">
+                    <button id="voicePreviewBtn" class="pill-btn outline sm"><i class="fas fa-play"></i> Preview Voice</button>
+                </div>
+                <hr class="drawer-divider">
+                <div class="drawer-setting">
+                    <span><i class="fas fa-moon"></i> Dark Mode</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="themeToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="drawer-setting">
+                    <span><i class="fas fa-volume-up"></i> Voice Replies</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="voiceToggleSetting" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="drawer-setting">
+                    <span><i class="fas fa-text-height"></i> Large Text</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="textSizeSetting">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ─── Top Bar ─── -->
+    <header>
+        <div class="header-left">
+            <button id="menuBtn" class="icon-btn" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+            <img src="logo.png" alt="Sahaara" class="header-logo">
+            <div class="header-text">
+                <h1>Sahaara</h1>
+                <p id="status">Threaded in Tradition</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <button id="handsfreeBtn" class="icon-btn" title="Continuous Hands-Free Conversation" aria-label="Toggle hands-free mode">
+                <i class="fas fa-headset"></i>
+            </button>
+            <button id="bedsideBtn" class="icon-btn" title="Bedside / Eyes-Free Sanctuary" aria-label="Bedside mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button id="voiceToggle" class="icon-btn active" aria-pressed="true" title="Voice replies" aria-label="Toggle voice">
+                <i class="fas fa-volume-up"></i>
+            </button>
+            <button id="helpBtnHeader" class="icon-btn sos-btn" title="Crisis helplines" aria-label="Helplines">
+                <i class="fas fa-phone-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ─── Crisis Alert Bar ─── -->
+    <div id="crisis" class="crisis-bar" hidden role="alert"></div>
+
+    <!-- ─── Main Chat Area ─── -->
+    <main id="mainArea">
+        <div id="chatBox" class="chat-container" aria-live="polite">
+
+            <!-- Welcome Card -->
+            <div id="welcomeCard" class="welcome-card">
+                <div class="welcome-glow"></div>
+                <div class="welcome-inner">
+                    <div class="welcome-avatar">
+                        <img src="logo.png" alt="Sahaara">
+                        <div class="avatar-ring"></div>
+                    </div>
+                    <h2 class="welcome-title">नमस्ते!</h2>
+                    <p class="welcome-subtitle">I am <strong>Sahaara</strong>, your compassionate companion.<br>Share your thoughts in any language. I'm here for you.</p>
+
+                    <!-- Verse of the Day -->
+                    <div id="votd" class="votd-card" hidden>
+                        <div class="votd-label"><i class="fas fa-om"></i> Verse of the Day</div>
+                        <div id="votdVerse" class="votd-verse"></div>
+                        <div id="votdMeaning" class="votd-meaning"></div>
+                        <button id="votdListen" class="pill-btn"><i class="fas fa-volume-up"></i> Listen</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suggestion Chips -->
+            <div id="chips" class="chips-container"></div>
+        </div>
+    </main>
+
+    <!-- ─── Floating Input Bar ─── -->
+    <footer>
+        <div class="input-bar">
+            <div class="lang-selector">
+                <i class="fas fa-globe lang-globe"></i>
+                <select id="languageSelector" aria-label="Select language">
+                    <option value="auto" selected>Auto</option>
+                    <option value="hi-IN">Hindi</option>
+                    <option value="en-IN">English</option>
+                    <option value="hi-en">Hinglish</option>
+                    <option value="mr-IN">Marathi</option>
+                    <option value="ta-IN">Tamil</option>
+                    <option value="te-IN">Telugu</option>
+                    <option value="kn-IN">Kannada</option>
+                    <option value="ml-IN">Malayalam</option>
+                    <option value="bn-IN">Bengali</option>
+                    <option value="pa-IN">Punjabi</option>
+                    <option value="gu-IN">Gujarati</option>
+                </select>
+            </div>
+            <form id="form" class="msg-form" autocomplete="off">
+                <input type="text" id="textInput" placeholder="Share what's on your mind…" maxlength="1500" aria-label="Type your message">
+                <button type="submit" id="sendBtn" aria-label="Send message" disabled>
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </form>
+            <button id="stopVoiceBtn" class="stop-btn" title="Stop speech & recording" aria-label="Stop audio and recording" hidden>
+                <i class="fas fa-stop"></i>
+            </button>
+            <button id="micBtn" class="mic-btn" aria-label="Tap to speak" title="Tap to speak">
+                <canvas id="micVisualizerCanvas" class="mic-visualizer-canvas" width="60" height="60"></canvas>
+                <i class="fas fa-microphone"></i>
+                <div class="mic-ripple"></div>
+                <div class="mic-ripple r2"></div>
+            </button>
+        </div>
+    </footer>
+
+    <!-- ─── Overlay: Guided Breathing ─── -->
+    <div id="breathOverlay" class="overlay" hidden role="dialog" aria-modal="true" aria-label="Guided breathing">
+        <div class="overlay-panel breath-panel">
+            <h3 id="bTitle" class="overlay-title"></h3>
+            <div class="orb-container">
+                <div id="orb" class="breathing-orb">
+                    <div class="orb-inner"></div>
+                    <div class="orb-glow"></div>
+                </div>
+            </div>
+            <p id="bCue" class="breath-cue"></p>
+            <p id="bCount" class="breath-count"></p>
+            <button id="bStop" class="pill-btn outline">Stop</button>
+        </div>
+    </div>
+
+    <!-- ─── Overlay: Mood Journal ─── -->
+    <div id="moodOverlay" class="overlay" hidden role="dialog" aria-modal="true" aria-label="Mood journal">
+        <div class="overlay-panel mood-panel">
+            <h3 class="overlay-title">How are you feeling?</h3>
+            <div id="moodPick" class="mood-picker"></div>
+            <h4 class="mood-history-label">Your last 7 check-ins <small>(saved only on this device)</small></h4>
+            <div id="moodBars" class="mood-bars"></div>
+            <button id="moodClose" class="pill-btn outline">Close</button>
+        </div>
+    </div>
+
+    <!-- ─── Overlay: Helplines ─── -->
+    <div id="helpOverlay" class="overlay" hidden role="dialog" aria-modal="true" aria-label="Helplines">
+        <div class="overlay-panel help-panel">
+            <h3 class="overlay-title">Talk to a person</h3>
+            <div id="helpList" class="helpline-list"></div>
+            <p class="fine-print">Sahaara is not a substitute for professional care. If you are in immediate danger, call <strong>112</strong> or go to the nearest hospital.</p>
+            <button id="helpClose" class="pill-btn outline">Close</button>
+        </div>
+    </div>
+
+    <!-- ─── Overlay: About ─── -->
+    <div id="aboutOverlay" class="overlay" hidden role="dialog" aria-modal="true" aria-label="About Sahaara">
+        <div class="overlay-panel about-panel">
+            <img src="logo.png" alt="Sahaara" class="about-logo">
+            <h3 class="overlay-title">Sahaara</h3>
+            <p class="about-tagline">Threaded in Tradition</p>
+            <p class="about-desc">A compassionate AI companion for emotional well-being, drawing from the timeless wisdom of the Bhagavad Gita. Sahaara listens with empathy, responds in your language, and offers gentle guidance through life's storms.</p>
+            <div class="about-features">
+                <div class="about-feat"><i class="fas fa-om"></i><span>Bhagavad Gita Wisdom</span></div>
+                <div class="about-feat"><i class="fas fa-microphone"></i><span>Voice Conversations</span></div>
+                <div class="about-feat"><i class="fas fa-globe"></i><span>11 Indian Languages</span></div>
+                <div class="about-feat"><i class="fas fa-shield-heart"></i><span>Crisis Safety Net</span></div>
+            </div>
+            <button id="aboutClose" class="pill-btn outline">Close</button>
+        </div>
+    </div>
+
+    <!-- ─── Overlay: Journal ─── -->
+    <div id="journalOverlay" class="overlay" hidden role="dialog" aria-modal="true" aria-label="Journal">
+        <div class="overlay-panel journal-panel">
+            <h3 class="overlay-title"><i class="fas fa-book-open"></i> My Journal</h3>
+            <p class="journal-desc">Write down your thoughts. Everything stays private on your device.</p>
+            <textarea id="journalText" class="journal-textarea" placeholder="What's on your mind today…" rows="6"></textarea>
+            <div class="journal-actions">
+                <button id="journalSave" class="pill-btn">Save Entry</button>
+                <button id="journalClose" class="pill-btn outline">Close</button>
+            </div>
+            <div id="journalEntries" class="journal-entries"></div>
+        </div>
+    </div>
+
+    <!-- ─── Breathing Pattern Picker ─── -->
+    <div id="breathPickerOverlay" class="overlay" hidden role="dialog" aria-modal="true" aria-label="Choose breathing exercise">
+        <div class="overlay-panel breath-picker-panel">
+            <h3 class="overlay-title"><i class="fas fa-wind"></i> Breathing Exercises</h3>
+            <div class="breath-options">
+                <button class="breath-option" data-pattern="long_exhale">
+                    <div class="breath-opt-icon"><i class="fas fa-lungs"></i></div>
+                    <div><strong>Long Exhale</strong><p>4s in, 6s out · Calming</p></div>
+                </button>
+                <button class="breath-option" data-pattern="box">
+                    <div class="breath-opt-icon"><i class="fas fa-square"></i></div>
+                    <div><strong>Box Breathing</strong><p>4-4-4-4 · Focus & balance</p></div>
+                </button>
+                <button class="breath-option" data-pattern="nadi">
+                    <div class="breath-opt-icon"><i class="fas fa-yin-yang"></i></div>
+                    <div><strong>Calm Breathing</strong><p>4s in, 6s out · Peace</p></div>
+                </button>
+                <button class="breath-option" data-pattern="bhramari">
+                    <div class="breath-opt-icon"><i class="fas fa-feather-pointed"></i></div>
+                    <div><strong>Humming Bee</strong><p>4s in, 8s hum · Soothing</p></div>
+                </button>
+            </div>
+            <button id="breathPickerClose" class="pill-btn outline">Cancel</button>
+        </div>
+    </div>
+
+    <!-- ─── Overlay: Bedside / Eyes-Free Sanctuary ─── -->
+    <div id="bedsideOverlay" class="bedside-overlay" hidden role="dialog" aria-modal="true" aria-label="Bedside eyes-free mode">
+        <div class="bedside-bg-glow"></div>
+        <div class="bedside-header">
+            <div class="bedside-clock" id="bedsideClock">--:--</div>
+            <button id="bedsideClose" class="icon-btn" aria-label="Exit bedside mode"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="bedside-center" id="bedsideTouchZone">
+            <div class="bedside-orb-wrapper">
+                <canvas id="bedsideVisualizerCanvas" class="bedside-visualizer-canvas" width="280" height="280"></canvas>
+                <div class="bedside-orb" id="bedsideOrb">
+                    <div class="bedside-orb-core"></div>
+                    <div class="bedside-orb-ring r1"></div>
+                    <div class="bedside-orb-ring r2"></div>
+                </div>
+            </div>
+            <div class="bedside-status" id="bedsideStatus">Sahaara is listening…</div>
+            <div class="bedside-transcript" id="bedsideTranscript">“Take a slow breath. I am right here with you.”</div>
+            <div class="bedside-hint"><i class="fas fa-hand-pointer"></i> Tap anywhere to speak or interrupt</div>
+        </div>
+        <div class="bedside-footer">
+            <button id="bedsideStopBtn" class="pill-btn stop-action-btn"><i class="fas fa-stop"></i> Stop</button>
+            <button id="bedsideHandsfreeBtn" class="pill-btn active"><i class="fas fa-headset"></i> Hands-Free Active</button>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
