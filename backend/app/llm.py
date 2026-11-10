@@ -54,7 +54,8 @@ class OpenAICompatProvider:
             cx = client()
             async with cx.stream("POST", f"{self.base_url}/chat/completions", json=body, headers=headers) as r:
                 if r.status_code >= 400:
-                    detail = (await r.aread()).decode("utf-8", "ignore")[:200]
+                    detail = (await r.aread()).decode("utf-8", "ignore")[:300]
+                    print(f"[LLM ERROR] {self.name} HTTP {r.status_code}: {detail}", flush=True)
                     raise LLMError(f"{self.name} HTTP {r.status_code}: {detail}")
                 async for data in _sse_lines(r):
                     if data == "[DONE]":
@@ -180,6 +181,9 @@ def build_providers(s: Settings) -> list:
             continue
         try:
             out.append(build_provider(n, s))
-        except LLMError:
+        except LLMError as e:
+            print(f"[LLM Warning] Could not initialize provider '{n}': {e}", flush=True)
             continue
+    active = [f"{getattr(p, 'name', '?')}:{getattr(p, 'model', '?')}" for p in out]
+    print(f"[LLM Initialized] Active providers: {active}", flush=True)
     return out or [MockProvider()]

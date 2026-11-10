@@ -201,7 +201,8 @@ def create_app() -> FastAPI:
                     if started and cleaner.clean:
                         text, cited, used = cleaner.clean, cleaner.cited, p.name
                         break
-                except LLMError:
+                except LLMError as e:
+                    print(f"[Chat LLM Error from {p.name}]: {e}", flush=True)
                     if started:  # partial text already shown: keep it rather than restarting
                         text, cited, used = cleaner.clean, cleaner.cited, p.name
                         break
@@ -371,7 +372,8 @@ def create_app() -> FastAPI:
                         sentence_buf += tail
                     full_text = cleaner.clean
                     break
-                except Exception:
+                except Exception as e:
+                    print(f"[Voice WS LLM Exception from {p.name}]: {e}", flush=True)
                     continue
 
             if not full_text:

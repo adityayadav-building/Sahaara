@@ -70,17 +70,46 @@ def _f(name: str, default: str = "") -> str:
 
 
 def get_settings() -> Settings:
-    provider = (_f("LLM_PROVIDER", "mock") or "mock").lower()
-    origins = tuple(o.strip() for o in _f("ALLOWED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000").split(",") if o.strip())
+    groq_k = _f("GROQ_API_KEY") or _f("GROQ_KEY") or _f("LLM_API_KEY")
+    gemini_k = _f("GEMINI_API_KEY") or _f("API_KEY")
+
+    # Auto-detect if user pasted a Groq key (starts with gsk_) into GEMINI_API_KEY
+    if gemini_k.startswith("gsk_"):
+        if not groq_k:
+            groq_k = gemini_k
+        gemini_k = ""
+
+    # Auto-detect provider if not explicitly specified
+    provider = (_f("LLM_PROVIDER") or "").lower()
+    if not provider:
+        if groq_k:
+            provider = "groq"
+        elif gemini_k:
+            provider = "gemini"
+        else:
+            provider = "mock"
+    elif provider == "gemini" and not gemini_k and groq_k:
+        provider = "groq"
+    elif provider == "groq" and not groq_k and gemini_k:
+        provider = "gemini"
+
+    # Auto-correct model when provider and model mismatch
+    model = _f("LLM_MODEL")
+    if provider == "groq" and (not model or "gemini" in model.lower() or "qwen" in model.lower()):
+        model = "llama-3.3-70b-versatile"
+    elif provider == "gemini" and (not model or "llama" in model.lower() or "qwen" in model.lower() or "mixtral" in model.lower()):
+        model = "gemini-3.1-flash-lite"
+
+    origins = tuple(o.strip() for o in _f("ALLOWED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000,*").split(",") if o.strip())
     return Settings(
         llm_provider=provider,
-        llm_fallback_provider=_f("LLM_FALLBACK_PROVIDER", "").lower(),
-        llm_model=_f("LLM_MODEL"),
+        llm_fallback_provider=_f("LLM_FALLBACK_PROVIDER", "mock").lower(),
+        llm_model=model,
         llm_base_url=_f("LLM_BASE_URL"),
         llm_temperature=float(_f("LLM_TEMPERATURE", "0.7")),
-        groq_api_key=_f("GROQ_API_KEY"),
-        gemini_api_key=_f("GEMINI_API_KEY") or _f("API_KEY"),  # old .env used API_KEY for Gemini
-        llm_api_key=_f("LLM_API_KEY"),
+        groq_api_key=groq_k,
+        gemini_api_key=gemini_k,
+        llm_api_key=_f("LLM_API_KEY") or groq_k,
         gnani_api_key=_f("GNANI_API_KEY"),
         gnani_stt_model=_f("GNANI_STT_MODEL", "prisma-v3.0"),
         gnani_tts_model=_f("GNANI_TTS_MODEL", "timbre-v2.5"),
