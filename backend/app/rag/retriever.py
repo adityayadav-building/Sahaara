@@ -289,7 +289,9 @@ class Retriever:
             col = client.get_collection(name="sahaara_wisdom", embedding_function=ef)
             if col and col.count() > 0:
                 self.chroma_collection = col
-        except Exception:
+                print(f"[Chroma] Successfully loaded collection 'sahaara_wisdom' with {col.count()} dense vectors.", flush=True)
+        except Exception as e:
+            print(f"[Chroma Info] Dense collection not loaded ({e})", flush=True)
             self.chroma_collection = None
 
     def __len__(self) -> int:

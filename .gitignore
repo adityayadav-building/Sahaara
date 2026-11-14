@@ -29,5 +29,4 @@ Thumbs.db
 # Large generated binary caches (can be rebuilt)
 backend/data/index/
 backend/data/tts_cache/
-backend/data/chroma_db/
 backend/data/source/
