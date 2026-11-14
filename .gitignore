@@ -1,4 +1,4 @@
-# Secrets and environments
+# ⚠️ NEVER remove .env - it contains live API keys
 .env
 *.env
 .venv/
@@ -26,11 +26,8 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Large binaries, caches and databases
+# Large generated binary caches (can be rebuilt)
 backend/data/index/
 backend/data/tts_cache/
 backend/data/chroma_db/
 backend/data/source/
-backend/data/corpus/user/*.jsonl
-# Gita text is from a copyrighted edition: keep it out of a public repo, rebuild with scripts/build_gita.py
-backend/data/gita/
